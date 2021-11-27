@@ -2,42 +2,49 @@
 Association between Leukotytic telomere length and infectious disease susceptibility
 
 ***Sample Demography Data;
+
 libname a xport "/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/DEMO.XPT";
 proc copy inlib=a outlib=work;
 libname b xport "/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/DEMO_B.XPT";
 proc copy inlib=b outlib=work;
 
 ***Hepatitis B Surface Antibody;
+
 libname c xport "/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/LAB02.XPT";
 proc copy inlib=c outlib=work;
 libname d xport "/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/L02_B.XPT";
 proc copy inlib=d outlib=work;
 
 ***Herpes Simplex Virus Type-1 & Type-2;
+
 libname E xport "/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/LAB09.XPT";
 proc copy inlib=E outlib=work;
 libname F xport "/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/L09_B.XPT";
 proc copy inlib=F outlib=work;
 
 ***Cytomegalovirus Antibodies - Serum (Surplus);
+
 libname G xport "/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/SSCMV_A.XPT";
 proc copy inlib=G outlib=work;
 libname H xport "/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/SSCMV_B.XPT";
 proc copy inlib=H outlib=work;
 
 ***HIV data;
+
 libname I xport "/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/LAB03.XPT";
 proc copy inlib=I outlib=work;
 libname J xport "/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/L03_B.XPT";
 proc copy inlib= J outlib=work;
 
 ***Telo Data;
+
 libname K xport "/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/TELO_A.XPT";
 proc copy inlib=K outlib=work;
 libname L xport "/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/TELO_B.XPT";
 proc copy inlib=L outlib=work;
 
 ***wholeblood percentage data;
+
 libname M xport "/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/LAB25.XPT";
 proc copy inlib=M outlib=work;
 libname N xport "/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/L25_B.XPT";
@@ -45,6 +52,7 @@ proc copy inlib=N outlib=work;
 run;
 
 ***BMI***;
+
 libname O xport"/home/u45142492/sasuser.v94/WORK/Master Essay/1999-2000 Data/BMX.XPT";
 proc copy inlib=O outlib=work;
 libname P xport"/home/u45142492/sasuser.v94/WORK/Master Essay/2001-2002 Data/BMX_B.XPT";
@@ -52,6 +60,7 @@ proc copy inlib=P outlib=work;
 run;
 
 ***display data;
+
 data demo_a; set a.demo;
 data demo_b; set b.demo_b;
 data HEPAB_a; set c.lab02;
@@ -85,7 +94,7 @@ keep SEQN riagendr ridageyr ridreth1 dmdeduc indhhinc DMDHHSIZ;***GENDER, AGE, R
 run;
 
 data hepab; set hepab;
-keep SEQN LBDHBG;***HBV surface antigen;
+keep SEQN LBDHBG;   ***HBV surface antigen;
 run;
 
 data herp; set herp;
@@ -93,11 +102,11 @@ keep SEQN LBXHE1 LBXHE2;
 run;
 
 data cytov; set cytov;
-keep SEQN SSCMIGM;***Cytomegalovirus IgM;
+keep SEQN SSCMIGM;   ***Cytomegalovirus IgM;
 run;
 
 data HIV; set hiv;
-keep SEQN LBDHI;***HIV antibody;
+keep SEQN LBDHI;   ***HIV antibody;
 run;
 
 data wholeblood;set wholeblood;
@@ -114,6 +123,7 @@ run;
 
 
 *********;
+
 data complete;
 merge demo hepab herp cytov hiv telo wholeblood BMI;
 run;
@@ -143,12 +153,14 @@ if BMXBMI=. then delete;
 run;
 
 ***reverse telomere length***;
+
 data complete;
 set complete;
 telomean = telomean*(-1);
 run; 
 
 ***Z transformation for telomean;
+
 proc means data=complete;
 var telomean;
 run;
@@ -163,6 +175,7 @@ run;
 **Logistic regression*****************************************************************;
 
 ***raw;
+
 data test11; set complete;
 if LBDHBG =. then delete;
 if LBDHBG = '3' THEN DELETE;
@@ -210,6 +223,7 @@ run;
 
 ***adjusted to blood type;
 
+
 data test1111; set complete;
 if LBDHBG =. then delete;
 if LBDHBG = '3' THEN DELETE;
@@ -256,6 +270,7 @@ model LBDHI = TELOMEAN LBXEOPCT LBXLYPCT LBXMOPCT LBXNEPCT LBXBAPCT;
 run;
 
 ***adjusted to covariates;
+
 
 data test11111; set complete;
 if LBDHBG =. then delete;
